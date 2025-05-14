@@ -53,10 +53,10 @@
 .flip-card {
   perspective: 1500px;
   background-color: transparent;
-  max-width: 360px;
+  max-width: 420px;
   width: 100%;
-  /* CR80/ISO ID-1 standard aspect ratio 85.6mm × 53.98mm (3.37in × 2.13in) */
-  height: 226px; 
+  /* CR80/ISO ID-1 standard aspect ratio 85.6mm × 53.98mm (3.37in × 2.13in) - adjusted for better display */
+  height: 260px; 
   margin: 0 auto;
   cursor: pointer;
   position: relative;
@@ -193,8 +193,8 @@
 }
 
 .card-zoom-container .flip-card {
-  max-width: 600px;
-  height: 376px;
+  max-width: 680px;
+  height: 420px;
 }
 
 @layer base {

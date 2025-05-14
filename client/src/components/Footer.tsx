@@ -19,7 +19,7 @@ export default function Footer() {
           </div>
           <div className="mt-4 md:mt-0">
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Powered by <span className="text-primary-600 dark:text-primary-400">RGU Digital Services</span>
+              Made with <span className="text-red-500">❤️</span> by <span className="text-primary-600 dark:text-primary-400">Debashish Bordoloi</span>
             </p>
           </div>
         </div>

@@ -139,12 +139,12 @@ export default function CardPreview({
   // Content for the front of the card
   const frontContent = (
     <div className="relative z-10 flex flex-col h-full p-4">
-      <div className="flex items-center">
+      <div className="flex items-center justify-center">
         {/* University Logo */}
         <motion.img 
           src={rguLogo} 
           alt="RGU Logo" 
-          className="h-16 w-16 object-contain" 
+          className="h-20 w-20 object-contain" 
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
@@ -193,7 +193,7 @@ export default function CardPreview({
             <motion.div 
               ref={photoPreviewRef}
               id="photoPreview" 
-              className="w-24 h-32 bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-400 text-xs overflow-hidden"
+              className="w-28 h-36 bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-400 text-xs overflow-hidden"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
@@ -214,7 +214,7 @@ export default function CardPreview({
           {/* Student Details */}
           <div className="w-2/3 pl-4">
             <motion.p 
-              className="text-lg font-bold text-gray-900 dark:text-gray-100"
+              className="text-xl font-bold text-gray-900 dark:text-gray-100"
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
@@ -240,7 +240,7 @@ export default function CardPreview({
             
             {/* Barcode with animation */}
             <motion.div 
-              className="barcode-container mt-3"
+              className="barcode-container mt-4"
               initial={{ opacity: 0, y: 10 }}
               animate={{ 
                 opacity: barcodeLoaded ? 1 : 0,
