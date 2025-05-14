@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { MoonIcon, SunIcon } from "lucide-react";
+import rguLogo from "@assets/rgu_logo.png";
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
@@ -12,7 +13,7 @@ export default function Header() {
           <div className="flex items-center">
             {/* University Logo */}
             <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/e/e3/RGU_logo.png" 
+              src={rguLogo} 
               alt="RGU Logo" 
               className="h-10 w-10 rounded-full object-contain"
             />

@@ -5,6 +5,7 @@ import { RefreshCw, Download, FlipHorizontal } from "lucide-react";
 import { formatDate, calculateValidityDate } from "@/lib/utils";
 import { generateLibraryCardPDF } from "@/lib/generate-pdf";
 import { StudentCardFormData } from "@shared/schema";
+import rguLogo from "@assets/rgu_logo.png";
 
 interface CardPreviewProps {
   student: {

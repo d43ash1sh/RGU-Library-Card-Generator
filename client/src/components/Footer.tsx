@@ -1,3 +1,5 @@
+import rguLogo from "@assets/rgu_logo.png";
+
 export default function Footer() {
   return (
     <footer className="bg-white dark:bg-gray-800 shadow-inner mt-12">
@@ -5,7 +7,7 @@ export default function Footer() {
         <div className="flex flex-col items-center justify-between md:flex-row">
           <div className="flex items-center space-x-2">
             <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/e/e3/RGU_logo.png" 
+              src={rguLogo} 
               alt="RGU Logo" 
               className="h-8 w-8 rounded-full object-contain"
             />

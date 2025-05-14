@@ -147,7 +147,7 @@ export async function generateLibraryCardPDF(
     const logoImg = await fetchImageAsBase64(logoUrl);
     // Set transparency
     doc.saveGraphicsState();
-    doc.setGState(doc.addGState({ opacity: 0.1 }));
+    doc.setGState(new doc.GState({ opacity: 0.1 }));
     doc.addImage(logoImg, "PNG", 17, 15, 20, 20);
     doc.restoreGraphicsState();
   } catch (error) {
