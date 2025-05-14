@@ -1,0 +1,66 @@
+Build a full-stack AI-powered web application called "RGU Library Card Generator" for Rajiv Gandhi University, Arunachal Pradesh. The goal is to allow students to generate a personalized digital library card by entering their details. The app should have a modern, responsive UI and allow downloading the card as a PDF with a unique barcode.
+
+✨ Features:
+1. A form to input: Full Name, Enrollment Number, Department, Course, Semester, and Validity Year.
+2. Dropdown fields for selecting department and course from the official list of Rajiv Gandhi University.
+3. On submission, generate a PDF library card with:
+   - Student details filled in a stylish card layout.
+   - A dynamically generated barcode (based on enrollment number).
+   - University logo and branding.
+4. Responsive, mobile-friendly UI with Tailwind CSS.
+5. Supports dark mode.
+6. Option to regenerate or download card in high resolution.
+7. AI assistance suggestions (e.g., pre-fill course info based on dept).
+8. Custom favicon, icon, and metadata.
+
+🎓 Departments (dropdown list):
+- Anthropology
+- Botany
+- Chemistry
+- Commerce
+- Computer Science & Engineering
+- Economics
+- Education
+- English
+- Geography
+- Hindi
+- History
+- Law
+- Management
+- Mass Communication
+- Mathematics & Computing
+- Physics
+- Political Science
+- Psychology
+- Sociology
+- Tribal Studies
+- Zoology
+
+🎓 Courses (dropdown list):
+- BA in Anthropology, Economics, English, Hindi, History, Political Science, Sociology, etc.
+- BSc in Botany, Chemistry, Physics, Zoology, Geography, Mathematics, etc.
+- BCom
+- BCA (Bachelor of Computer Applications)
+- BEd (Bachelor of Education)
+- MA in Economics, English, History, Hindi, Political Science, Sociology, etc.
+- MSc in Botany, Chemistry, Physics, Zoology, Geography, Mathematics, etc.
+- MCom
+- MCA (Master of Computer Applications)
+- MTech in Computer Science & Engineering, Electronics & Communication
+- Law programs (LLB, LLM)
+- Diploma in Computerized Accounting (DCA)
+- PG Diploma in Yoga Therapy Education (PGDYTE)
+- Certificate Course in Communicative English (CCCE)
+- Certificate in Strength Training & Conditioning (CCSTC)
+
+💻 Tech Stack:
+- Frontend: React.js + Tailwind CSS + HTML5 + JS
+- Backend: Node.js + Express.js
+- Database: MongoDB (or Firebase as fallback)
+- PDF Generation: jsPDF + html2canvas
+- Barcode: JsBarcode
+- AI: OpenAI API for intelligent suggestions (e.g., auto-fill from partial data)
+- Deployment: Vercel (frontend), Render/Heroku (backend)
+- Design: Custom favicon and logo using Canva or Figma
+
+Output: Full production-ready code with clean folder structure and comments. Include README with deployment instructions.
