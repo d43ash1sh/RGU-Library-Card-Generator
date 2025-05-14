@@ -2,6 +2,7 @@ import { jsPDF } from "jspdf";
 import JsBarcode from "jsbarcode";
 import { StudentCardFormData } from "@shared/schema";
 import { formatDate, calculateValidityDate } from "./utils";
+import rguLogo from "@assets/rgu_logo.png";
 
 // Create an SVG element for barcode generation
 function createSVGElement(): SVGSVGElement {
@@ -41,10 +42,24 @@ export async function generateLibraryCardPDF(
   doc.rect(0, 0, 55, 85, "F");
   
   // Add university logo
-  const logoUrl = "https://upload.wikimedia.org/wikipedia/commons/e/e3/RGU_logo.png";
   try {
-    const logoImg = await fetchImageAsBase64(logoUrl);
-    doc.addImage(logoImg, "PNG", 3, 3, 12, 12);
+    // Convert the imported logo to a data URL
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.src = rguLogo;
+    
+    await new Promise<void>((resolve) => {
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx?.drawImage(img, 0, 0);
+        resolve();
+      };
+    });
+    
+    const logoDataUrl = canvas.toDataURL('image/png');
+    doc.addImage(logoDataUrl, "PNG", 3, 3, 12, 12);
   } catch (error) {
     console.error("Error loading university logo:", error);
   }
@@ -144,12 +159,29 @@ export async function generateLibraryCardPDF(
   
   // Add university logo watermark
   try {
-    const logoImg = await fetchImageAsBase64(logoUrl);
-    // Set transparency
-    doc.saveGraphicsState();
-    doc.setGState(new doc.GState({ opacity: 0.1 }));
-    doc.addImage(logoImg, "PNG", 17, 15, 20, 20);
-    doc.restoreGraphicsState();
+    // Convert the imported logo to a data URL for watermark
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.src = rguLogo;
+    
+    await new Promise<void>((resolve) => {
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        // Draw with transparency directly on the canvas
+        if (ctx) {
+          ctx.globalAlpha = 0.1;
+          ctx.drawImage(img, 0, 0);
+        }
+        resolve();
+      };
+    });
+    
+    const logoDataUrl = canvas.toDataURL('image/png');
+    
+    // Add the already transparent image
+    doc.addImage(logoDataUrl, "PNG", 17, 15, 20, 20);
   } catch (error) {
     console.error("Error loading university logo for watermark:", error);
   }
@@ -183,18 +215,20 @@ export async function generateLibraryCardPDF(
   return doc.output("dataurlstring");
 }
 
-// Helper function to fetch an image and convert it to base64
-async function fetchImageAsBase64(url: string): Promise<string> {
-  try {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  } catch (error) {
-    throw new Error(`Failed to fetch image: ${error}`);
-  }
+// Helper function to convert imported image to base64
+async function imageToDataURL(imgSrc: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx?.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.onerror = (e) => reject(e);
+    img.src = imgSrc;
+  });
 }

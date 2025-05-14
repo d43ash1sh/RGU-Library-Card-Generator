@@ -129,7 +129,7 @@ export default function CardPreview({
               <div className="flex items-center">
                 {/* University Logo */}
                 <img 
-                  src="https://upload.wikimedia.org/wikipedia/commons/e/e3/RGU_logo.png" 
+                  src={rguLogo} 
                   alt="RGU Logo" 
                   className="h-16 w-16 object-contain" 
                 />
@@ -197,7 +197,7 @@ export default function CardPreview({
                 {/* Watermark logo */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
                   <img 
-                    src="https://upload.wikimedia.org/wikipedia/commons/e/e3/RGU_logo.png" 
+                    src={rguLogo} 
                     alt="RGU Logo Watermark" 
                     className="w-32 h-32 object-contain" 
                   />
