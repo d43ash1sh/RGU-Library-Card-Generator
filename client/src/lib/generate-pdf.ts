@@ -9,53 +9,35 @@ function createSVGElement(): SVGSVGElement {
   return document.createElementNS("http://www.w3.org/2000/svg", "svg");
 }
 
-// Generate barcode as data URL
-function generateBarcodeDataURL(text?: string): string {
-  // Generate random barcode if text is not provided
+// Generate barcode as PNG data URL
+async function generateBarcodePNGDataURL(text?: string): Promise<string> {
   const barcodeValue = text || generateRandomBarcode();
-  
-  try {
-    const svg = createSVGElement();
-    JsBarcode(svg, barcodeValue, {
-      format: "CODE128",
-      lineColor: "#000",
-      width: 2,
-      height: 50,
-      displayValue: false,
-      valid: () => true // Force barcode to display even if invalid format
-    });
-    
-    const svgStr = new XMLSerializer().serializeToString(svg);
-    return "data:image/svg+xml;base64," + btoa(svgStr);
-  } catch (error) {
-    console.error("Error generating barcode in PDF:", error);
-    
-    // Create a fallback barcode with random value
-    try {
-      const fallbackValue = generateRandomBarcode();
-      const fallbackSvg = createSVGElement();
-      JsBarcode(fallbackSvg, fallbackValue, {
-        format: "CODE128",
-        lineColor: "#000",
-        width: 2,
-        height: 50,
-        displayValue: false
-      });
-      
-      const fallbackSvgStr = new XMLSerializer().serializeToString(fallbackSvg);
-      return "data:image/svg+xml;base64," + btoa(fallbackSvgStr);
-    } catch (fallbackError) {
-      console.error("Even fallback barcode failed:", fallbackError);
-      
-      // Create a minimal SVG as last resort
-      const emptyBarcode = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="50">
-        <rect width="100%" height="100%" fill="white"/>
-        <text x="50%" y="50%" font-family="monospace" text-anchor="middle" dominant-baseline="middle">Barcode Unavailable</text>
-      </svg>`;
-      
-      return "data:image/svg+xml;base64," + btoa(emptyBarcode);
-    }
-  }
+  const svg = createSVGElement();
+  JsBarcode(svg, barcodeValue, {
+    format: "CODE128",
+    lineColor: "#000",
+    width: 2,
+    height: 50,
+    displayValue: false,
+    valid: () => true
+  });
+
+  // Convert SVG to PNG using a canvas
+  const svgStr = new XMLSerializer().serializeToString(svg);
+  const img = new window.Image();
+  const svgBase64 = "data:image/svg+xml;base64," + btoa(svgStr);
+
+  return new Promise((resolve) => {
+    img.onload = function () {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx?.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL("image/png"));
+    };
+    img.src = svgBase64;
+  });
 }
 
 // Generate a digital library card PDF
@@ -150,7 +132,7 @@ export async function generateLibraryCardPDF(
   try {
     // Use enrollment number or generate a random barcode
     const barcodeValue = cardData.enrollmentNumber || generateRandomBarcode();
-    const barcodeDataUrl = generateBarcodeDataURL(barcodeValue);
+    const barcodeDataUrl = await generateBarcodePNGDataURL(barcodeValue);
     doc.addImage(barcodeDataUrl, "PNG", 20, 34, 30, 8);
     
     // Add barcode text below
@@ -163,7 +145,7 @@ export async function generateLibraryCardPDF(
     // Try to generate a random barcode as fallback
     try {
       const randomBarcode = generateRandomBarcode();
-      const barcodeDataUrl = generateBarcodeDataURL(randomBarcode);
+      const barcodeDataUrl = await generateBarcodePNGDataURL(randomBarcode);
       doc.addImage(barcodeDataUrl, "PNG", 20, 34, 30, 8);
       
       // Add barcode text below

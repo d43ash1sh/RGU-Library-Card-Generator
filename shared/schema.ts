@@ -37,7 +37,7 @@ export const studentCardFormSchema = z.object({
   course: z.string().min(1, "Course is required"),
   semester: z.string().min(1, "Semester is required"),
   validityYears: z.coerce.number().int().min(1).max(5),
-  photo: z.instanceof(File).optional(),
+  photo: z.any().optional(),
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;

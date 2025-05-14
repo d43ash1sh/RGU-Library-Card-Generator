@@ -57,9 +57,9 @@ export function DisclaimerModal() {
           
           <div className="py-4">
             <p className="text-center text-gray-800 dark:text-gray-200 font-medium">
-              This is not an official library card. This website is part of a student project and is intended for 
-              educational and demonstration purposes only. The generated cards are not valid for any official 
-              university use.
+            This project, RGU Library Card Generator, is developed by Debashish Bordoloi as part of an educational and personal learning initiative.
+It is not affiliated with or officially approved by Rajiv Gandhi University.
+The generated library card is for demonstration and educational purposes only and does not hold any official validity.
             </p>
           </div>
           

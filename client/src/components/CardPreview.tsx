@@ -188,7 +188,7 @@ export default function CardPreview({
         <motion.img 
           src={rguLogo} 
           alt="RGU Logo" 
-          className="h-20 w-20 object-contain" 
+          className={isFullscreen ? "h-36 w-36 object-contain" : "h-20 w-20 object-contain"}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
@@ -237,7 +237,7 @@ export default function CardPreview({
             <motion.div 
               ref={photoPreviewRef}
               id="photoPreview" 
-              className="w-28 h-36 bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-400 text-xs overflow-hidden"
+              className={isFullscreen ? "w-48 h-64 bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-400 text-xl overflow-hidden" : "w-28 h-36 bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-400 text-xs overflow-hidden"}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
@@ -344,7 +344,7 @@ export default function CardPreview({
         <img 
           src={rguLogo} 
           alt="RGU Logo Watermark" 
-          className="w-32 h-32 object-contain" 
+          className={isFullscreen ? "w-64 h-64 object-contain" : "w-32 h-32 object-contain"} 
         />
       </div>
       
@@ -480,11 +480,11 @@ export default function CardPreview({
             exit={{ opacity: 0 }}
             onClick={() => setIsFullscreen(false)}
           >
-            <div className="relative">
+            <div className="relative flex items-center justify-center w-full h-full">
               <Button 
                 variant="secondary" 
                 size="sm" 
-                className="absolute -top-10 right-0 bg-white text-black dark:bg-gray-800 dark:text-white"
+                className="absolute -top-10 right-0 bg-white text-black dark:bg-gray-800 dark:text-white z-50"
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsFullscreen(false);
@@ -492,9 +492,9 @@ export default function CardPreview({
               >
                 <X className="h-4 w-4" />
               </Button>
-              
               <motion.div 
-                className={`flip-card ${isFlipped ? 'flipped' : ''}`} 
+                className={`flip-card bg-white shadow-2xl rounded-xl p-4 ${isFlipped ? 'flipped' : ''} fullscreen-card`}
+                style={{ minWidth: 420, minHeight: 260, maxWidth: 900, height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleFlip();
