@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import JsBarcode from "jsbarcode";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Download, FlipHorizontal, Maximize2, X, RotateCw } from "lucide-react";
-import { formatDate, calculateValidityDate } from "@/lib/utils";
+import { formatDate, calculateValidityDate, generateRandomBarcode } from "@/lib/utils";
 import { generateLibraryCardPDF } from "@/lib/generate-pdf";
 import { StudentCardFormData } from "@shared/schema";
 import rguLogo from "@assets/rgu_logo.png";
@@ -34,6 +34,12 @@ export default function CardPreview({
   const barcodeRef = useRef<SVGSVGElement>(null);
   const photoPreviewRef = useRef<HTMLDivElement>(null);
   
+  // Store the barcode value
+  const [barcodeValue, setBarcodeValue] = useState<string>(() => {
+    // Use the enrollment number or generate a random barcode
+    return student.enrollmentNumber || generateRandomBarcode();
+  });
+  
   useEffect(() => {
     // Update the photo preview
     if (photo && photoPreviewRef.current) {
@@ -50,15 +56,22 @@ export default function CardPreview({
       reader.readAsDataURL(photo);
     }
     
-    // Generate barcode with the enrollment number and add animation
-    if (barcodeRef.current && student.enrollmentNumber) {
+    // Update barcode value when enrollment number changes
+    if (student.enrollmentNumber) {
+      setBarcodeValue(student.enrollmentNumber);
+    }
+  }, [student.enrollmentNumber, photo]);
+  
+  // Generate barcode with the current value
+  useEffect(() => {
+    if (barcodeRef.current && barcodeValue) {
       try {
         // Reset loading state
         setBarcodeLoaded(false);
         
         setTimeout(() => {
           if (barcodeRef.current) {
-            JsBarcode(barcodeRef.current, student.enrollmentNumber || "1446RGUST23", {
+            JsBarcode(barcodeRef.current, barcodeValue, {
               format: "CODE128",
               lineColor: "#000",
               width: 2,
@@ -72,10 +85,25 @@ export default function CardPreview({
         }, 300); // Slight delay for animation effect
       } catch (e) {
         console.error("Error generating barcode:", e);
+        
+        // If error occurs, try to generate with a random barcode instead
+        if (barcodeRef.current) {
+          const randomBarcode = generateRandomBarcode();
+          setBarcodeValue(randomBarcode);
+          
+          JsBarcode(barcodeRef.current, randomBarcode, {
+            format: "CODE128",
+            lineColor: "#000",
+            width: 2,
+            height: 30,
+            displayValue: false
+          });
+        }
+        
         setBarcodeLoaded(true); // Ensure UI is not stuck
       }
     }
-  }, [student.enrollmentNumber, photo]);
+  }, [barcodeValue]);
   
   // Handle escape key for fullscreen mode
   useEffect(() => {
@@ -257,6 +285,16 @@ export default function CardPreview({
                 >
                   <RotateCw className="w-4 h-4 text-gray-400" />
                 </motion.div>
+              )}
+              {barcodeLoaded && (
+                <motion.p
+                  className="text-xs text-center mt-1 text-gray-700 dark:text-gray-300 font-mono"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                >
+                  {barcodeValue}
+                </motion.p>
               )}
             </motion.div>
           </div>

@@ -75,3 +75,11 @@ export function getDepartmentCode(department: string): string {
   // Take first letter of each word
   return words.map(word => word[0]).join("").toUpperCase();
 }
+
+/**
+ * Generate a random 12-digit barcode number
+ * @returns A valid 12-digit barcode number as string
+ */
+export function generateRandomBarcode(): string {
+  return Math.floor(100000000000 + Math.random() * 900000000000).toString();
+}

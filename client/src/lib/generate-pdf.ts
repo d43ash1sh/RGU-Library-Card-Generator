@@ -1,7 +1,7 @@
 import { jsPDF } from "jspdf";
 import JsBarcode from "jsbarcode";
 import { StudentCardFormData } from "@shared/schema";
-import { formatDate, calculateValidityDate } from "./utils";
+import { formatDate, calculateValidityDate, generateRandomBarcode } from "./utils";
 import rguLogo from "@assets/rgu_logo.png";
 
 // Create an SVG element for barcode generation
