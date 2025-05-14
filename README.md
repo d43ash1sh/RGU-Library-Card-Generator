@@ -26,9 +26,6 @@ A full-stack web application for generating digital library membership cards for
 ### Card Preview (Back)
 ![Card Preview Back](attached_assets/2.png)
 
-### Fullscreen Card Preview
-![Fullscreen Card](attached_assets/Screenshot 2025-05-15 at 12.23.06 AM.png)
-
 ---
 
 ## Getting Started
