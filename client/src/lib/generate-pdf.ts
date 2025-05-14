@@ -10,9 +10,12 @@ function createSVGElement(): SVGSVGElement {
 }
 
 // Generate barcode as data URL
-function generateBarcodeDataURL(text: string): string {
+function generateBarcodeDataURL(text?: string): string {
+  // Generate random barcode if text is not provided
+  const barcodeValue = text || generateRandomBarcode();
+  
   const svg = createSVGElement();
-  JsBarcode(svg, text, {
+  JsBarcode(svg, barcodeValue, {
     format: "CODE128",
     lineColor: "#000",
     width: 2,
@@ -114,10 +117,32 @@ export async function generateLibraryCardPDF(
   
   // Add barcode
   try {
-    const barcodeDataUrl = generateBarcodeDataURL(cardData.enrollmentNumber);
+    // Use enrollment number or generate a random barcode
+    const barcodeValue = cardData.enrollmentNumber || generateRandomBarcode();
+    const barcodeDataUrl = generateBarcodeDataURL(barcodeValue);
     doc.addImage(barcodeDataUrl, "PNG", 20, 34, 30, 8);
+    
+    // Add barcode text below
+    doc.setFontSize(6);
+    doc.setFont("courier", "normal");
+    doc.text(barcodeValue, 35, 43, { align: "center" });
+    doc.setFont("helvetica", "normal");
   } catch (error) {
     console.error("Error generating barcode:", error);
+    // Try to generate a random barcode as fallback
+    try {
+      const randomBarcode = generateRandomBarcode();
+      const barcodeDataUrl = generateBarcodeDataURL(randomBarcode);
+      doc.addImage(barcodeDataUrl, "PNG", 20, 34, 30, 8);
+      
+      // Add barcode text below
+      doc.setFontSize(6);
+      doc.setFont("courier", "normal");
+      doc.text(randomBarcode, 35, 43, { align: "center" });
+      doc.setFont("helvetica", "normal");
+    } catch (fallbackError) {
+      console.error("Failed to generate fallback barcode:", fallbackError);
+    }
   }
   
   // Add dates

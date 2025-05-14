@@ -230,12 +230,12 @@ export default function CardPreview({
               <span>Photo</span>
             </motion.div>
             <motion.p 
-              className="text-xs mt-2 text-gray-800 dark:text-gray-300 text-center"
+              className="text-xs mt-2 text-gray-800 dark:text-gray-300 text-center font-mono"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.6 }}
             >
-              {student.enrollmentNumber || "1446RGUST23"}
+              {student.enrollmentNumber || barcodeValue}
             </motion.p>
           </div>
           
