@@ -14,17 +14,48 @@ function generateBarcodeDataURL(text?: string): string {
   // Generate random barcode if text is not provided
   const barcodeValue = text || generateRandomBarcode();
   
-  const svg = createSVGElement();
-  JsBarcode(svg, barcodeValue, {
-    format: "CODE128",
-    lineColor: "#000",
-    width: 2,
-    height: 50,
-    displayValue: false
-  });
-  
-  const svgStr = new XMLSerializer().serializeToString(svg);
-  return "data:image/svg+xml;base64," + btoa(svgStr);
+  try {
+    const svg = createSVGElement();
+    JsBarcode(svg, barcodeValue, {
+      format: "CODE128",
+      lineColor: "#000",
+      width: 2,
+      height: 50,
+      displayValue: false,
+      valid: () => true // Force barcode to display even if invalid format
+    });
+    
+    const svgStr = new XMLSerializer().serializeToString(svg);
+    return "data:image/svg+xml;base64," + btoa(svgStr);
+  } catch (error) {
+    console.error("Error generating barcode in PDF:", error);
+    
+    // Create a fallback barcode with random value
+    try {
+      const fallbackValue = generateRandomBarcode();
+      const fallbackSvg = createSVGElement();
+      JsBarcode(fallbackSvg, fallbackValue, {
+        format: "CODE128",
+        lineColor: "#000",
+        width: 2,
+        height: 50,
+        displayValue: false
+      });
+      
+      const fallbackSvgStr = new XMLSerializer().serializeToString(fallbackSvg);
+      return "data:image/svg+xml;base64," + btoa(fallbackSvgStr);
+    } catch (fallbackError) {
+      console.error("Even fallback barcode failed:", fallbackError);
+      
+      // Create a minimal SVG as last resort
+      const emptyBarcode = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="50">
+        <rect width="100%" height="100%" fill="white"/>
+        <text x="50%" y="50%" font-family="monospace" text-anchor="middle" dominant-baseline="middle">Barcode Unavailable</text>
+      </svg>`;
+      
+      return "data:image/svg+xml;base64," + btoa(emptyBarcode);
+    }
+  }
 }
 
 // Generate a digital library card PDF

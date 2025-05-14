@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
+import { DisclaimerModal } from "@/components/DisclaimerModal";
 
 function Router() {
   return (
@@ -22,6 +23,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <TooltipProvider>
+          <DisclaimerModal />
           <Toaster />
           <Router />
         </TooltipProvider>
