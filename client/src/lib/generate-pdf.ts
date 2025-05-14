@@ -43,22 +43,7 @@ export async function generateLibraryCardPDF(
   
   // Add university logo
   try {
-    // Convert the imported logo to a data URL
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-    img.src = rguLogo;
-    
-    await new Promise<void>((resolve) => {
-      img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx?.drawImage(img, 0, 0);
-        resolve();
-      };
-    });
-    
-    const logoDataUrl = canvas.toDataURL('image/png');
+    const logoDataUrl = await getRGULogoDataURL();
     doc.addImage(logoDataUrl, "PNG", 3, 3, 12, 12);
   } catch (error) {
     console.error("Error loading university logo:", error);
@@ -159,11 +144,13 @@ export async function generateLibraryCardPDF(
   
   // Add university logo watermark
   try {
-    // Convert the imported logo to a data URL for watermark
+    const logoDataUrl = await getRGULogoDataURL();
+    
+    // Create a transparent version of the logo
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const img = new Image();
-    img.src = rguLogo;
+    img.src = logoDataUrl;
     
     await new Promise<void>((resolve) => {
       img.onload = () => {
@@ -178,10 +165,10 @@ export async function generateLibraryCardPDF(
       };
     });
     
-    const logoDataUrl = canvas.toDataURL('image/png');
+    const transparentLogoDataUrl = canvas.toDataURL('image/png');
     
     // Add the already transparent image
-    doc.addImage(logoDataUrl, "PNG", 17, 15, 20, 20);
+    doc.addImage(transparentLogoDataUrl, "PNG", 17, 15, 20, 20);
   } catch (error) {
     console.error("Error loading university logo for watermark:", error);
   }
@@ -231,4 +218,27 @@ async function imageToDataURL(imgSrc: string): Promise<string> {
     img.onerror = (e) => reject(e);
     img.src = imgSrc;
   });
+}
+
+// Convert the imported logo to a data URL for the PDF
+async function getRGULogoDataURL(): Promise<string> {
+  try {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.src = rguLogo;
+    
+    return new Promise((resolve, reject) => {
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx?.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.onerror = reject;
+    });
+  } catch (error) {
+    console.error("Error converting RGU logo:", error);
+    throw error;
+  }
 }
